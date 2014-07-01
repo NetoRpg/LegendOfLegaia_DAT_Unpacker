@@ -16,16 +16,20 @@ namespace DAT_Unpacker
         }
 
 
-        public static byte[] extractPiece(this FileStream ms, int offset, int length)
+        public static byte[] extractPiece(this FileStream ms, int offset, int length, int changeOffset = -1)
         {
+            if (changeOffset > -1) ms.Position = changeOffset;
+
             byte[] data = new byte[length];
             ms.Read(data, 0, length);
 
             return data;
         }
 
-        public static byte[] extractPiece(this MemoryStream ms, int offset, int length)
+        public static byte[] extractPiece(this MemoryStream ms, int offset, int length, int changeOffset = -1)
         {
+            if (changeOffset > -1) ms.Position = changeOffset;
+
             byte[] data = new byte[length];
             ms.Read(data, 0, length);
 
@@ -33,11 +37,14 @@ namespace DAT_Unpacker
         }
 
 
-        public static void Save(this byte[] data, string path)
+        public static void Save(this byte[] data, string path, int offset = -1, int length = -1)
         {
+            int _offset = (offset > -1) ? offset : 0;
+            int _length = (length > -1) ? length : data.Length;
+
             using (FileStream fs = File.Create(path))
             {
-                fs.Write(data, 0, data.Length);
+                fs.Write(data, _offset, _length);
             }
         }
 
