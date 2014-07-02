@@ -207,13 +207,14 @@ namespace DAT_Unpacker
                                     timPack.Position = 0;
                                     timPack.Write(timHeader.ToArray(), 0, (int)timHeader.Length);
                                     fs.Write(timPack.ToArray(), 0, (int)timPack.Length);
+                                    while (fs.Position % 0x800 != 0) fs.Position += 1;
                                 }
                             }
                             continue;
                         }
                          data = File.ReadAllBytes(Path.Combine(basePath, file.name));
                          fs.Write(data, 0, data.Length);
-                       
+                         while (fs.Position % 0x800 != 0) fs.Position += 1;
                     }
 
                     fs.Position = 0;
